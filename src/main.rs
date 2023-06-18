@@ -21,9 +21,8 @@ async fn main() {
 
     // build our application with a route
     let app = Router::new()
-        .nest("/api", ApiRouter::new())
-        // `GET /` goes to `root`
-        .route("/", get(root));
+        .route("/", get(root))
+        .nest("/api", ApiRouter::new());
 
     // run our app with hyper
     // `axum::Server` is a re-export of `hyper::Server`
@@ -39,4 +38,3 @@ async fn main() {
 async fn root() -> &'static str {
     "Hello, World!"
 }
-

@@ -9,11 +9,12 @@ use crate::managers::user::UserManager;
 pub struct UserRouter;
 
 impl UserRouter {
+
     pub fn new() -> Router {
         Router::new()
-            // `POST /users` goes to `create_user`
             .route("/users", post(create_user))
     }
+
 }
 
 async fn create_user(
@@ -22,6 +23,9 @@ async fn create_user(
     // TODO | Dependency injection? Reference via context?
     let user_manager = UserManager { };
 
+    // TODO | Validate the incoming data
+
+    // Save the resource to the data store
     let user = user_manager.create(&payload);
 
     // Map the new resource to the response DTO
@@ -30,8 +34,6 @@ async fn create_user(
         username: user.username,
     };
 
-    // this will be converted into a JSON response
-    // with a status code of `201 Created`
     (StatusCode::CREATED, Json(response))
 }
 
