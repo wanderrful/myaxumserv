@@ -260,6 +260,7 @@ dependencies = [
  "axum",
  "serde",
  "tokio",
+ "tower-service",
  "tracing",
  "tracing-subscriber",
 ]
