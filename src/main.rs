@@ -18,7 +18,6 @@ async fn main() {
 
     // build our application with a route
     let app = Router::new()
-        .route("/", get(root))
         .nest("/api", ApiRouter::new());
 
     // run our app with hyper
