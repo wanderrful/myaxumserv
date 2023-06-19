@@ -37,6 +37,7 @@ impl UserManager {
 
         let users = user_accessor.list_users();
 
+        // Map resource data to response DTO
         ListUsersResponse {
             data: users.iter()
                 .map(|it| ListUsersItem {
