@@ -1,8 +1,10 @@
 # MyAxumServ
 
-Concerns are separated in this way:
+Concerns are separated in this way, using the "List Users" (`GET /api/v1/users`) operation as an example:
 
+![](docs/images/sequence-diagram-list-users.png)
 
+(For simplicity, I've implemented a simple file data store, to serve as a plain, local DB client)
 
 ## Operations
 
