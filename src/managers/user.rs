@@ -1,34 +1,35 @@
-use axum::Json;
-use axum::http::StatusCode;
-use serde::{Deserialize, Serialize};
-
 use crate::accessors::user::UserAccessor;
 use crate::models::user::UserModel;
-use axum::extract::Query;
+use crate::resources::user::{CreateUserRequest, CreateUserResponse, ListUsersResponse, ListUsersItem};
+use crate::utils::uuid::generate_uuid;
 
 pub struct UserManager;
 
 impl UserManager {
 
-    pub async fn create_user(Json(payload): Json<CreateUserRequest>) -> (StatusCode, Json<CreateUserResponse>) {
+    pub fn create_user(&self, payload: CreateUserRequest) -> CreateUserResponse {
         // TODO | Dependency injection? Reference via context?
         let mut user_accessor = UserAccessor::new();
 
         // TODO | Validate the incoming data
 
-        // Save the resource to the data store
-        let user = user_accessor.save(&payload.into());
-
-        // Map the new resource to the response DTO
-        let response = CreateUserResponse {
-            id: user.id,
-            username: user.username,
+        // Map the request to the UserModel
+        let user_model = UserModel {
+            id: generate_uuid(),
+            username: payload.username.clone()
         };
 
-        (StatusCode::CREATED, Json(response))
+        // Save the resource to the data store
+        let user = user_accessor.save(&user_model);
+
+        // Map the new resource to the response DTO
+        CreateUserResponse {
+            id: user.id,
+            username: user.username,
+        }
     }
 
-    pub async fn list_users(Query(_payload): Query<ListUsersRequest>) -> (StatusCode, Json<ListUsersResponse>) {
+    pub fn list_users(&self) -> ListUsersResponse {
         // TODO | Dependency innjection? Reference via context?
         let mut user_accessor = UserAccessor::new();
 
@@ -36,46 +37,14 @@ impl UserManager {
 
         let users = user_accessor.list_users();
 
-        let response = ListUsersResponse {
+        ListUsersResponse {
             data: users.iter()
-                .map(|it| <UserModel as Into<ListUsersItem>>::into(it.clone()))
+                .map(|it| ListUsersItem {
+                    id: generate_uuid(),
+                    username: it.username.clone()
+                })
                 .collect()
-        };
-
-        (StatusCode::OK, Json(response))
+        }
     }
 
-}
-
-/// Request DTO for the CreateUser operation
-#[derive(Deserialize)]
-pub struct CreateUserRequest {
-    pub username: String,
-}
-
-/// Response DTO for the CreateUser operation
-#[derive(Serialize)]
-pub struct CreateUserResponse {
-    pub id: String,
-    pub username: String,
-}
-
-/// Request DTO (query params) for the ListUsers operation
-#[derive(Deserialize)]
-pub struct ListUsersRequest {
-    pub limit: Option<usize>,
-    pub username: Option<String>
-}
-
-/// Response DTO for the ListUsers operation
-#[derive(Serialize)]
-pub struct ListUsersResponse {
-    pub data: Vec<ListUsersItem>
-}
-
-/// Helper struct for the ListUsers operation response DTO
-#[derive(Serialize)]
-pub struct ListUsersItem {
-    pub id: String,
-    pub username: String
 }

@@ -1,7 +1,7 @@
 use axum::Router;
 use axum::routing::post;
 
-use crate::managers::user::UserManager;
+use crate::resources::user::UserResource;
 
 pub struct UserRouter;
 
@@ -9,7 +9,7 @@ impl UserRouter {
 
     pub fn new() -> Router {
         Router::new()
-            .route("/users", post(UserManager::create_user).get(UserManager::list_users))
+            .route("/users", post(UserResource::create_user).get(UserResource::list_users))
     }
 
 }

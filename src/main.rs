@@ -2,7 +2,9 @@ mod accessors;
 mod clients;
 mod managers;
 mod models;
+mod resources;
 mod routes;
+mod utils;
 
 use std::net::SocketAddr;
 
