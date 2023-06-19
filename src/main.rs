@@ -30,8 +30,3 @@ async fn main() {
         .await
         .unwrap();
 }
-
-// basic handler that responds with a static string
-async fn root() -> &'static str {
-    "Hello, World!"
-}
