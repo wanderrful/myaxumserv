@@ -6,6 +6,7 @@ pub struct ApiRouter;
 
 impl ApiRouter {
 
+    /// Provide a new instance of this service's top-level API Router.
     pub fn new() -> Router {
         let v1_routes = Router::new()
             .merge(UserRouter::new());
