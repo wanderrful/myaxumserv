@@ -2,6 +2,7 @@ mod routes;
 mod models;
 mod managers;
 mod accessors;
+mod clients;
 
 use axum::{routing::{get, post}, http::StatusCode, response::IntoResponse, Json, Router, http};
 use serde::{Deserialize, Serialize};

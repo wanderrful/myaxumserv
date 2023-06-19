@@ -1,25 +1,27 @@
-use crate::models::user::UserModel;
 use std::collections::HashMap;
 
+use crate::models::user::UserModel;
+use crate::clients::local_db::LocalDb;
+
 pub struct UserAccessor {
-    data: Vec<UserModel>
+    db_connection: LocalDb
 }
 
 impl UserAccessor {
 
     pub fn new() -> Self {
-        UserAccessor { data: Vec::new() }
+        UserAccessor { db_connection: LocalDb::new() }
     }
 
-    pub fn list_users(&self) -> Vec<UserModel> {
-        self.data.clone()
+    pub fn list_users(&mut self) -> Vec<UserModel> {
+        self.db_connection.load()
     }
 
-    pub fn save(&self, user: &UserModel) -> UserModel {
-        // TODO | Save the resource to a data store
+    pub fn save(&mut self, user: &UserModel) -> UserModel {
+        self.db_connection.save(user);
 
         UserModel {
-            id: user.id,
+            id: user.id.clone(),
             username: user.username.clone()
         }
     }

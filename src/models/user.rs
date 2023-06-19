@@ -1,8 +1,10 @@
+use serde::{Deserialize, Serialize};
+
 use crate::managers::user::{CreateUserRequest, ListUsersItem};
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct UserModel {
-    pub id: u64,
+    pub id: String,
     pub username: String
 }
 
@@ -20,7 +22,7 @@ impl From<CreateUserRequest> for UserModel {
 
     fn from(value: CreateUserRequest) -> Self {
         UserModel {
-            id: 0,
+            id: uuid::Uuid::new_v4().to_string(),
             username: value.username
         }
     }

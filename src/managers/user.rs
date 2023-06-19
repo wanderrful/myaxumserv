@@ -12,7 +12,7 @@ impl UserManager {
 
     pub async fn create_user(Json(payload): Json<CreateUserRequest>) -> (StatusCode, Json<CreateUserResponse>) {
         // TODO | Dependency injection? Reference via context?
-        let user_accessor = UserAccessor::new();
+        let mut user_accessor = UserAccessor::new();
 
         // TODO | Validate the incoming data
 
@@ -30,7 +30,7 @@ impl UserManager {
 
     pub async fn list_users(Query(payload): Query<ListUsersRequest>) -> (StatusCode, Json<ListUsersResponse>) {
         // TODO | Dependency innjection? Reference via context?
-        let user_accessor = UserAccessor::new();
+        let mut user_accessor = UserAccessor::new();
 
         // TODO | Validate the incoming data
 
@@ -56,7 +56,7 @@ pub struct CreateUserRequest {
 /// Response DTO for the CreateUser operation
 #[derive(Serialize)]
 pub struct CreateUserResponse {
-    pub id: u64,
+    pub id: String,
     pub username: String,
 }
 
@@ -76,6 +76,6 @@ pub struct ListUsersResponse {
 /// Helper struct for the ListUsers operation response DTO
 #[derive(Serialize)]
 pub struct ListUsersItem {
-    pub id: u64,
+    pub id: String,
     pub username: String
 }
