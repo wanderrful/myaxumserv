@@ -28,7 +28,7 @@ impl UserManager {
         (StatusCode::CREATED, Json(response))
     }
 
-    pub async fn list_users(Query(payload): Query<ListUsersRequest>) -> (StatusCode, Json<ListUsersResponse>) {
+    pub async fn list_users(Query(_payload): Query<ListUsersRequest>) -> (StatusCode, Json<ListUsersResponse>) {
         // TODO | Dependency innjection? Reference via context?
         let mut user_accessor = UserAccessor::new();
 

@@ -1,5 +1,9 @@
 # MyAxumServ
 
+Concerns are separated in this way:
+
+
+
 ## Operations
 
 ### GET

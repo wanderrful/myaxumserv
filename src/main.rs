@@ -1,15 +1,14 @@
-mod routes;
-mod models;
-mod managers;
 mod accessors;
 mod clients;
+mod managers;
+mod models;
+mod routes;
 
-use axum::{routing::{get, post}, http::StatusCode, response::IntoResponse, Json, Router, http};
-use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 
+use axum::Router;
+
 use crate::routes::api::ApiRouter;
-use crate::routes::users::UserRouter;
 
 #[tokio::main]
 async fn main() {

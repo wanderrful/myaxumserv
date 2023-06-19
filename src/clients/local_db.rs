@@ -1,4 +1,3 @@
-use axum::Json;
 use serde::{Deserialize, Serialize};
 
 use crate::models::user::UserModel;
@@ -8,14 +7,14 @@ struct LocalDbModel {
     users: Vec<UserModel>
 }
 
-pub struct LocalDb {
+pub struct LocalDbClient {
     data: LocalDbModel
 }
 
-impl LocalDb {
+impl LocalDbClient {
 
     pub fn new() -> Self {
-        let mut instance = LocalDb { data: LocalDbModel { users: Vec::new() } };
+        let mut instance = LocalDbClient { data: LocalDbModel { users: Vec::new() } };
 
         instance.load();
 

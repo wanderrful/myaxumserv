@@ -1,16 +1,14 @@
-use std::collections::HashMap;
-
 use crate::models::user::UserModel;
-use crate::clients::local_db::LocalDb;
+use crate::clients::local_db::LocalDbClient;
 
 pub struct UserAccessor {
-    db_connection: LocalDb
+    db_connection: LocalDbClient
 }
 
 impl UserAccessor {
 
     pub fn new() -> Self {
-        UserAccessor { db_connection: LocalDb::new() }
+        UserAccessor { db_connection: LocalDbClient::new() }
     }
 
     pub fn list_users(&mut self) -> Vec<UserModel> {

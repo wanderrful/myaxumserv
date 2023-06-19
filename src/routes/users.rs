@@ -1,9 +1,6 @@
-use axum::{Router, Json};
-use axum::http::StatusCode;
-use axum::routing::{get, post};
-use serde::{Deserialize, Serialize};
+use axum::Router;
+use axum::routing::post;
 
-use crate::models::user::UserModel;
 use crate::managers::user::UserManager;
 
 pub struct UserRouter;

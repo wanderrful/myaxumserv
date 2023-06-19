@@ -1,4 +1,5 @@
 use axum::Router;
+
 use crate::routes::users::UserRouter;
 
 pub struct ApiRouter;
