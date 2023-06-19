@@ -5,7 +5,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::managers::user::UserManager;
 
-
+/// The resource is the entry point, from which we exit the web framework and enter
+///     the application's internal logic.
 pub struct UserResource;
 
 impl UserResource {
@@ -18,6 +19,7 @@ impl UserResource {
 
         let response = user_manager.create_user(payload);
 
+        // TODO | Error case?
         (StatusCode::CREATED, Json(response))
     }
 
@@ -29,6 +31,7 @@ impl UserResource {
 
         let response = user_manager.list_users();
 
+        // TODO | Error case?
         (StatusCode::OK, Json(response))
     }
 

@@ -3,6 +3,7 @@ use crate::models::user::UserModel;
 use crate::resources::user::{CreateUserRequest, CreateUserResponse, ListUsersResponse, ListUsersItem};
 use crate::utils::uuid::generate_uuid;
 
+/// The manager is not responsible for validation, and is not coupled to the web framework.
 pub struct UserManager;
 
 impl UserManager {
@@ -10,8 +11,6 @@ impl UserManager {
     pub fn create_user(&self, payload: CreateUserRequest) -> CreateUserResponse {
         // TODO | Dependency injection? Reference via context?
         let mut user_accessor = UserAccessor::new();
-
-        // TODO | Validate the incoming data
 
         // Map the request to the UserModel
         let user_model = UserModel {
@@ -32,8 +31,6 @@ impl UserManager {
     pub fn list_users(&self) -> ListUsersResponse {
         // TODO | Dependency innjection? Reference via context?
         let mut user_accessor = UserAccessor::new();
-
-        // TODO | Validate the incoming data
 
         let users = user_accessor.list_users();
 
