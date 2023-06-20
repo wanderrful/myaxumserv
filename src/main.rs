@@ -1,6 +1,7 @@
 mod accessors;
 mod clients;
 mod managers;
+mod middlewares;
 mod models;
 mod resources;
 mod routes;

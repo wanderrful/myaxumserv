@@ -19,7 +19,8 @@ impl UserResource {
 
         let response = user_manager.create_user(payload);
 
-        // TODO | Error case?
+        // TODO | Error case? Maybe we should wrap the response DTO in a result object,
+        //  so we can handle the error here at this layer?
         (StatusCode::CREATED, Json(response))
     }
 

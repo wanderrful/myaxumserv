@@ -266,6 +266,8 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "tower-layer",
+ "tower-service",
  "uuid",
 ]
 

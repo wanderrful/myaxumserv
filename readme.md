@@ -1,5 +1,13 @@
 # MyAxumServ
 
+This is a demonstration of a simple CRUD web service for Rust, using `axum` as its web framework.
+
+## Why Axum?
+
+According to [crates.io, when we search for HTTP Server packages and sort by recent downloads](https://crates.io/categories/web-programming::http-server), `axum` is, by a large margin, currently the web framework with the most community support and activity.
+
+## Design
+
 Concerns are separated in this way, using the "List Users" (`GET /api/v1/users`) operation as an example:
 
 ![](docs/images/sequence-diagram-list-users.png)
