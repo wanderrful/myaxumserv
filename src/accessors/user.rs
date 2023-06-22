@@ -1,11 +1,9 @@
 use std::sync::Arc;
 
 use shaku::{Component, Interface};
-use shaku_axum::Inject;
 
 use crate::models::user::UserModel;
-use crate::modules::api::ApiModule;
-use crate::clients::local_db::{LocalDbClientImpl, LocalDbClient};
+use crate::clients::local_db::LocalDbClient;
 
 pub trait UserAccessor : Interface {
     fn list_users(&self) -> Vec<UserModel>;

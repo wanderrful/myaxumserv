@@ -6,7 +6,6 @@ use axum::routing::post;
 use axum::http::StatusCode;
 use shaku_axum::Inject;
 
-use crate::middlewares::logger::LoggerMiddleware;
 use crate::resources::user::{UserResource, CreateUserRequest, CreateUserResponse, ListUsersRequest, ListUsersResponse};
 use crate::modules::api::ApiModule;
 use crate::state::api::ApiState;
@@ -23,7 +22,6 @@ impl UserRouter {
             .route("/users",
                    post(create_user)
                        .get(list_users))
-            .layer(LoggerMiddleware { target: "UserResourceMiddleware" })
             .with_state(state)
             // NOTE | The state must be added at the end!
     }

@@ -1,11 +1,9 @@
 use std::sync::Arc;
 
 use shaku::{Component, Interface};
-use shaku_axum::Inject;
 
 use crate::accessors::user::UserAccessor;
 use crate::models::user::UserModel;
-use crate::modules::api::ApiModule;
 use crate::resources::user::{CreateUserRequest, CreateUserResponse, ListUsersResponse, ListUsersItem};
 use crate::utils::uuid::generate_uuid;
 
@@ -49,7 +47,7 @@ impl UserManager for UserManagerImpl {
 
         // Map resource data to response DTO
         ListUsersResponse {
-            data: users.iter()
+            users: users.iter()
                 .map(|it| ListUsersItem {
                     id: generate_uuid(),
                     username: it.username.clone()

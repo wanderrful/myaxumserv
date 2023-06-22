@@ -1,8 +1,6 @@
 use axum::Router;
 
 use crate::routes::users::UserRouter;
-use std::sync::Arc;
-use crate::state::api::ApiState;
 
 pub struct ApiRouter;
 

@@ -10,18 +10,17 @@ mod state;
 mod utils;
 
 use std::net::SocketAddr;
-use std::sync::Arc;
 
 use axum::Router;
 
-use crate::modules::api::ApiModule;
 use crate::routes::api::ApiRouter;
-use crate::state::api::ApiState;
+use crate::middlewares::logger::LoggerMiddleware;
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .nest("/api", ApiRouter::new());
+        .nest("/api", ApiRouter::new())
+        .layer(LoggerMiddleware);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 

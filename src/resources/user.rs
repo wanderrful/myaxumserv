@@ -1,13 +1,11 @@
-use axum::extract::Query;
+use std::sync::Arc;
+
 use axum::Json;
 use axum::http::StatusCode;
 use serde::{Deserialize, Serialize};
 use shaku::{Component, Interface};
-use shaku_axum::Inject;
 
 use crate::managers::user::UserManager;
-use crate::modules::api::ApiModule;
-use std::sync::Arc;
 
 /// The resource is the entry point, from which we exit the web framework and enter
 ///     the application's internal logic.
@@ -69,7 +67,7 @@ pub struct ListUsersRequest {
 /// Response DTO for the ListUsers operation
 #[derive(Serialize)]
 pub struct ListUsersResponse {
-    pub data: Vec<ListUsersItem>
+    pub users: Vec<ListUsersItem>
 }
 
 /// Helper struct for the ListUsers operation response DTO

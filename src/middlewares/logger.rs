@@ -8,16 +8,13 @@ use tower_service::Service;
 /// NOTE | When applying a "layer", it only applies to everything applied
 ///     before it, in the router.
 #[derive(Clone)]
-pub struct LoggerMiddleware {
-    pub(crate) target: &'static str,
-}
+pub struct LoggerMiddleware;
 
 impl<S> Layer<S> for LoggerMiddleware {
     type Service = LoggerService<S>;
 
     fn layer(&self, service: S) -> Self::Service {
         LoggerService {
-            target: self.target,
             service
         }
     }
@@ -26,7 +23,6 @@ impl<S> Layer<S> for LoggerMiddleware {
 // This service implements the Log behavior
 #[derive(Clone)]
 pub struct LoggerService<S> {
-    target: &'static str,
     service: S,
 }
 
@@ -46,7 +42,7 @@ impl<S, Request> Service<Request> for LoggerService<S>
     /// This is the entry point for the incoming request.
     fn call(&mut self, request: Request) -> Self::Future {
         // Insert log statement here or other functionality
-        println!("request = {:?}, target = {:?}", request, self.target);
+        println!("request = {:?}", request);
         self.service.call(request)
     }
 }

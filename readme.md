@@ -31,7 +31,7 @@ curl localhost:3000/api/v1/users -H "Content-Type: application/json" --data "{\"
 ## Dependencies
 
 ### Web framework
-- **axum**: The star of the show! This web service is built using this framework.
+- **axum**: The star of the show! This web service is built using this framework. Is owned by the `tokio` team.
 - **tokio**: Transitive dependency of axum. It's only main use here is the annotation on the main() method.
 - **tower-service**: Axum uses their `Service` concept as a more complete way to separate routers from handlers  
 - **tower-layer**:  Axum uses its `Layer` concept to separate the router from the middleware. Also depends on `Service`.

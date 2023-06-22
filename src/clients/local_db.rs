@@ -1,9 +1,7 @@
-use serde::{Deserialize, Serialize};
 use shaku::{Component, Interface};
 
 use crate::models::local_db::LocalDbModel;
 use crate::models::user::UserModel;
-use std::cell::RefCell;
 use std::sync::RwLock;
 
 pub trait LocalDbClient : Interface {
