@@ -1,50 +1,31 @@
 use serde::{Deserialize, Serialize};
+use shaku::{Component, Interface};
 
+use crate::models::local_db::LocalDbModel;
 use crate::models::user::UserModel;
+use std::cell::RefCell;
+use std::sync::RwLock;
 
-#[derive(Deserialize, Serialize)]
-struct LocalDbModel {
-    users: Vec<UserModel>
+pub trait LocalDbClient : Interface {
+    fn save(&self, user: &UserModel);
+    fn load(&self) -> Vec<UserModel>;
 }
 
-pub struct LocalDbClient {
-    data: LocalDbModel
+#[derive(Component)]
+#[shaku(interface = LocalDbClient)]
+pub struct LocalDbClientImpl {
+    #[shaku(default)]
+    data: RwLock<LocalDbModel>
 }
 
-impl LocalDbClient {
-
-    pub fn new() -> Self {
-        let mut instance = LocalDbClient { data: LocalDbModel { users: Vec::new() } };
-
-        instance.load();
-
-        instance
-    }
-
+impl LocalDbClient for LocalDbClientImpl {
     /// Write the existing data state to the local file
-    pub fn save(&mut self, user: &UserModel) {
-        self.data.users.push(user.clone());
-
-        let _ = std::fs::write(Self::get_file_path(), serde_json::to_string(&self.data)
-            .expect("error serializing UserModel"));
+    fn save(&self, user: &UserModel) {
+        self.data.write().expect("error unlocking LocalDbModel").save(user);
     }
 
     /// Read the persisted data state from the local file
-    pub fn load(&mut self) -> Vec<UserModel> {
-        if self.data.users.len() == 0 {
-            let file_contents = std::fs::read_to_string(Self::get_file_path())
-                .expect(format!("error loading file {}", Self::get_file_path()).as_str());
-            let serialized: LocalDbModel = serde_json::from_str(&*file_contents)
-                .expect("error serializing file");
-
-            self.data = serialized;
-        }
-
-        self.data.users.clone()
+    fn load(&self) -> Vec<UserModel> {
+        self.data.write().expect("error unlocking LocalDbModel").load()
     }
-
-    fn get_file_path() -> String {
-        String::from("resources/local_db.json")
-    }
-
 }

@@ -2,35 +2,43 @@ use axum::extract::Query;
 use axum::Json;
 use axum::http::StatusCode;
 use serde::{Deserialize, Serialize};
+use shaku::{Component, Interface};
+use shaku_axum::Inject;
 
 use crate::managers::user::UserManager;
+use crate::modules::api::ApiModule;
+use std::sync::Arc;
 
 /// The resource is the entry point, from which we exit the web framework and enter
 ///     the application's internal logic.
-pub struct UserResource;
+pub trait UserResource : Interface {
+    fn create_user(&self, payload: CreateUserRequest) -> (StatusCode, Json<CreateUserResponse>);
+    fn list_users(&self, payload: ListUsersRequest) -> (StatusCode, Json<ListUsersResponse>);
+}
 
-impl UserResource {
+#[derive(Component)]
+#[shaku(interface = UserResource)]
+pub(crate) struct UserResourceImpl {
+    #[shaku(inject)]
+    user_manager: Arc<dyn UserManager>
+}
 
-    pub async fn create_user(Json(payload): Json<CreateUserRequest>) -> (StatusCode, Json<CreateUserResponse>) {
-        // TODO | Dependency injection? Reference via context?
-        let user_manager = UserManager { };
+impl UserResource for UserResourceImpl {
 
+    fn create_user(&self, payload: CreateUserRequest) -> (StatusCode, Json<CreateUserResponse>) {
         // TODO | Validate the incoming request
 
-        let response = user_manager.create_user(payload);
+        let response = self.user_manager.create_user(payload);
 
         // TODO | Error case? Maybe we should wrap the response DTO in a result object,
         //  so we can handle the error here at this layer?
         (StatusCode::CREATED, Json(response))
     }
 
-    pub async fn list_users(Query(_payload): Query<ListUsersRequest>) -> (StatusCode, Json<ListUsersResponse>) {
-        // TODO | Dependency injection? Reference via context?
-        let user_manager = UserManager { };
-
+    fn list_users(&self, _payload: ListUsersRequest) -> (StatusCode, Json<ListUsersResponse>) {
         // TODO | Validate the incoming request
 
-        let response = user_manager.list_users();
+        let response = self.user_manager.list_users();
 
         // TODO | Error case?
         (StatusCode::OK, Json(response))

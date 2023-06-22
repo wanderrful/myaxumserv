@@ -39,6 +39,10 @@ curl localhost:3000/api/v1/users -H "Content-Type: application/json" --data "{\"
 ### ORM
 - **serde**: Axum uses this to serialize and deserialize structs. In this application, it's mostly used to label things.
 - **serde_json**: Only used for reading and writing from the `resources/local_db.json` file, for DB storage.
+
+### Dependency Injection
+- **shaku**: A popular dependency injection framework, according to crates.io.
+- **shaku_axum**: Adds an Inject trait, which integrates with Axum, so that we can query it in method handler signatures.
   
 ## Utility
 - **uuid**: To set user ID fields as UUIDv4 strings. 

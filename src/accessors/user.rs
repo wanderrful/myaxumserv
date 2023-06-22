@@ -1,21 +1,31 @@
-use crate::models::user::UserModel;
-use crate::clients::local_db::LocalDbClient;
+use std::sync::Arc;
 
-pub struct UserAccessor {
-    db_connection: LocalDbClient
+use shaku::{Component, Interface};
+use shaku_axum::Inject;
+
+use crate::models::user::UserModel;
+use crate::modules::api::ApiModule;
+use crate::clients::local_db::{LocalDbClientImpl, LocalDbClient};
+
+pub trait UserAccessor : Interface {
+    fn list_users(&self) -> Vec<UserModel>;
+    fn save(&self, user: &UserModel) -> UserModel;
 }
 
-impl UserAccessor {
+#[derive(Component)]
+#[shaku(interface = UserAccessor)]
+pub(crate) struct UserAccessorImpl {
+    #[shaku(inject)]
+    db_connection: Arc<dyn LocalDbClient>
+}
 
-    pub fn new() -> Self {
-        UserAccessor { db_connection: LocalDbClient::new() }
-    }
+impl UserAccessor for UserAccessorImpl {
 
-    pub fn list_users(&mut self) -> Vec<UserModel> {
+    fn list_users(&self) -> Vec<UserModel> {
         self.db_connection.load()
     }
 
-    pub fn save(&mut self, user: &UserModel) -> UserModel {
+    fn save(&self, user: &UserModel) -> UserModel {
         self.db_connection.save(user);
 
         UserModel {
