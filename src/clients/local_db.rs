@@ -1,8 +1,9 @@
+use std::sync::RwLock;
+
 use shaku::{Component, Interface};
 
 use crate::models::local_db::LocalDbModel;
 use crate::models::user::UserModel;
-use std::sync::RwLock;
 
 pub trait LocalDbClient : Interface {
     fn save(&self, user: &UserModel);
@@ -24,6 +25,6 @@ impl LocalDbClient for LocalDbClientImpl {
 
     /// Read the persisted data state from the local file
     fn load(&self) -> Vec<UserModel> {
-        self.data.write().expect("error unlocking LocalDbModel").load()
+        self.data.read().expect("error unlocking LocalDbModel").load()
     }
 }

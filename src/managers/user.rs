@@ -7,12 +7,13 @@ use crate::models::user::UserModel;
 use crate::resources::user::{CreateUserRequest, CreateUserResponse, ListUsersResponse, ListUsersItem};
 use crate::utils::uuid::generate_uuid;
 
+/// The manager is the primary entry point of our actual application's logic,
+///     without any dependency on the web framework itself.
 pub trait UserManager : Interface {
     fn create_user(&self, payload: CreateUserRequest) -> CreateUserResponse;
     fn list_users(&self) -> ListUsersResponse;
 }
 
-/// The manager is not responsible for validation, and is not coupled to the web framework.
 #[derive(Component)]
 #[shaku(interface = UserManager)]
 pub(crate) struct UserManagerImpl {
@@ -22,9 +23,6 @@ pub(crate) struct UserManagerImpl {
 
 impl UserManager for UserManagerImpl {
     fn create_user(&self, payload: CreateUserRequest) -> CreateUserResponse {
-        // TODO | Dependency injection? Reference via context?
-        // let mut user_accessor = UserAccessor::new();
-
         // Map the request to the UserModel
         let user_model = UserModel {
             id: generate_uuid(),
@@ -42,14 +40,13 @@ impl UserManager for UserManagerImpl {
     }
 
     fn list_users(&self) -> ListUsersResponse {
-        // TODO | Dependency innjection? Reference via context?
         let users = self.user_accessor.list_users();
 
         // Map resource data to response DTO
         ListUsersResponse {
             users: users.iter()
                 .map(|it| ListUsersItem {
-                    id: generate_uuid(),
+                    id: it.id.clone(),
                     username: it.username.clone()
                 })
                 .collect()

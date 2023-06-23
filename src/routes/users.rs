@@ -6,11 +6,13 @@ use axum::routing::post;
 use axum::http::StatusCode;
 use shaku_axum::Inject;
 
-use crate::resources::user::{UserResource, CreateUserRequest, CreateUserResponse, ListUsersRequest, ListUsersResponse};
 use crate::modules::api::ApiModule;
+use crate::resources::user::{
+    UserResource, CreateUserRequest, CreateUserResponse, ListUsersRequest, ListUsersResponse
+};
 use crate::state::api::ApiState;
 
-pub struct UserRouter;
+pub(crate) struct UserRouter;
 
 impl UserRouter {
     pub fn new() -> Router {
@@ -22,16 +24,22 @@ impl UserRouter {
             .route("/users",
                    post(create_user)
                        .get(list_users))
-            .with_state(state)
             // NOTE | The state must be added at the end!
+            .with_state(state)
     }
 }
 
 /// NOTE | The Inject<> must be the first argument! It's a quirk of shaku_axum.
-async fn create_user(user_resource: Inject<ApiModule, dyn UserResource>, Json(payload): Json<CreateUserRequest>) -> (StatusCode, Json<CreateUserResponse>) {
+async fn create_user(
+    user_resource: Inject<ApiModule, dyn UserResource>,
+    Json(payload): Json<CreateUserRequest>
+) -> (StatusCode, Json<CreateUserResponse>) {
     user_resource.create_user(payload)
 }
 
-async fn list_users(user_resource: Inject<ApiModule, dyn UserResource>, Query(payload): Query<ListUsersRequest>) -> (StatusCode, Json<ListUsersResponse>) {
+async fn list_users(
+    user_resource: Inject<ApiModule, dyn UserResource>,
+    Query(payload): Query<ListUsersRequest>
+) -> (StatusCode, Json<ListUsersResponse>) {
     user_resource.list_users(payload)
 }

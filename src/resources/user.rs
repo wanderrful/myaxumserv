@@ -28,8 +28,7 @@ impl UserResource for UserResourceImpl {
 
         let response = self.user_manager.create_user(payload);
 
-        // TODO | Error case? Maybe we should wrap the response DTO in a result object,
-        //  so we can handle the error here at this layer?
+        // TODO | Error case? Maybe we should use axum's `Either` concept here
         (StatusCode::CREATED, Json(response))
     }
 
@@ -38,7 +37,7 @@ impl UserResource for UserResourceImpl {
 
         let response = self.user_manager.list_users();
 
-        // TODO | Error case?
+        // TODO | Error case? Maybe we should use axum's `Either` concept here
         (StatusCode::OK, Json(response))
     }
 

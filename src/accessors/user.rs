@@ -6,8 +6,8 @@ use crate::models::user::UserModel;
 use crate::clients::local_db::LocalDbClient;
 
 pub trait UserAccessor : Interface {
-    fn list_users(&self) -> Vec<UserModel>;
     fn save(&self, user: &UserModel) -> UserModel;
+    fn list_users(&self) -> Vec<UserModel>;
 }
 
 #[derive(Component)]
@@ -18,11 +18,6 @@ pub(crate) struct UserAccessorImpl {
 }
 
 impl UserAccessor for UserAccessorImpl {
-
-    fn list_users(&self) -> Vec<UserModel> {
-        self.db_connection.load()
-    }
-
     fn save(&self, user: &UserModel) -> UserModel {
         self.db_connection.save(user);
 
@@ -32,4 +27,7 @@ impl UserAccessor for UserAccessorImpl {
         }
     }
 
+    fn list_users(&self) -> Vec<UserModel> {
+        self.db_connection.load()
+    }
 }
